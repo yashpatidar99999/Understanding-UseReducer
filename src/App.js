@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from 'react';
 
-function App() {
+// Initial state for the theme
+const initialState = {
+  theme: 'light',  // Set the default theme as 'light'
+};
+
+// Reducer function to handle theme toggling
+const themeReducer = (state, action) => {
+  switch (action.type) {
+    case 'TOGGLE_THEME':
+      return {
+        ...state,
+        theme: state.theme === 'light' ? 'dark' : 'light', // Toggle between 'light' and 'dark'
+      };
+    default:
+      return state;
+  }
+};
+
+const App = () => {
+  // Use useReducer to manage state transitions
+  const [state, dispatch] = useReducer(themeReducer, initialState);
+
+  // Function to toggle the theme
+  const toggleTheme = () => {
+    dispatch({ type: 'TOGGLE_THEME' });
+  };
+
+  // Apply different styles based on the current theme
+  const themeStyles = state.theme === 'light' ? {
+    backgroundColor: '#fff',
+    color: '#000',
+  } : {
+    backgroundColor: '#333',
+    color: '#fff',
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={themeStyles}>
+      <h1>Theme Toggle with useReducer</h1>
+      <p>Current theme: {state.theme}</p>
+      <button onClick={toggleTheme}>
+        Toggle Theme
+      </button>
     </div>
   );
-}
+};
 
 export default App;
